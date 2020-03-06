@@ -9,23 +9,22 @@ int solveKnapsack(const vector<int> &profits, const vector<int> &weights, int ca
     if (capacity <= 0 || !weights.size() || weights.size() != profits.size())
         return 0;
 
-    vector<vector<int> > dp(n, vector<int>(capacity + 1));
+    vector<vector<int> > dp(n, vector<int>(capacity + 1)); // 2D array, row as items(pick or not pick), col as capacity(from zero to the capacity)
 
-    for (int i = 0; i < n; i++)
+    for (int i = 0; i < n; i++) // if the capactiy is 0 then we can not fit in any item, profit will always be 0
         dp[i][0] = 0;
-    for (int c = 0; c <= capacity; c++) 
+    for (int c = 0; c <= capacity; c++) // if we can only choose the first one to fit in, we can only get profit if the weight of that item is <= to the capacity 
         dp[0][c] = weights[0] <= c ? profits[0] : 0;
-    // int m = weights.size();
     for (int i = 1; i < n; i++) {
         for (int c = 1; c <= capacity; c++) {
             int p1 = 0, p2 = 0;
-            if (weights[i] <= c)
-                p1 = profits[i] + dp[i - 1][c - weights[i]];
-            p2 = dp[i - 1][c];
-            dp[i][c] = max(p1, p2);
+            if (weights[i] <= c) // if we include current item
+                p1 = profits[i] + dp[i - 1][c - weights[i]]; // profit = current item + the maximum profit we can get with the remaining capacity(full capactiy minus what we spent for the current one)
+            p2 = dp[i - 1][c];  // if we exclude this item
+            dp[i][c] = max(p1, p2); // pick the maximum
         }
     }
-    return dp[n - 1][capacity];
+    return dp[n - 1][capacity]; 
 }
 
 int main(void) {
