@@ -1,6 +1,4 @@
 /**
- * https://leetcode.com/problems/coin-change
- * 
     Given an infinite supply of ‘n’ coin denominations and a total money amount, we are asked to find the total number of distinct ways to make up that amount.
 
     Example:
@@ -23,28 +21,45 @@
 
 using namespace std;
 
-int countChange(const vector<int> &denominations, int total) {
+
+int minimumCountChange(const vector<int> &denominations, int total) {
     if (!denominations.size() || !total) 
         return 0;
 
     int length = denominations.size();
-    vector<vector<int> > dp(length, vector<int>(total + 1));
+    vector<vector<int> > dp(length, vector<int>(total + 1, total + 1));
 
     for (int i = 0; i < length; i++)
-        dp[i][0] = 1;
+        dp[i][0] = 0;
     for (int i = 0; i < length; i++) {
-        for (int t = 1; t <= total; t++) {
+        for (int t = 1; t <= total; t++)
+        {
             if (i > 0)
                 dp[i][t] = dp[i - 1][t];
-            if (t >= denominations[i]) 
-                dp[i][t] += dp[i][t - denominations[i]];
-        }
+            dp[i][t] = min(dp[i][t], dp[i][t - denominations[i]] + 1);           
+        } 
     }
+    int ret = dp[length - 1][total];
+    return ret == (total + 1) ? -1 : ret;
+}
 
-    return dp[length - 1][total];
+int minimumCountChange2(const vector<int> &denominations, int total) {
+    if (!denominations.size() || !total) 
+        return 0;
+
+    int length = denominations.size();
+    vector<int> dp(total + 1, total + 1);
+    dp[0] = 0;
+   for (int i = 1; i <= total; i++) {
+       for (int j = 0; j < length; j++) {
+            if (denominations[j] <= i)
+                dp[i] = min(dp[i], dp[i - denominations[j]] + 1);
+       }
+   }
+   return dp[total] > total ? -1 : dp[total];
 }
 
 int main(int argc, char *argv[]) {
   vector<int> denominations = {1, 2, 3};
-  cout << countChange(denominations, 5) << endl;
+  cout << minimumCountChange2(denominations, 5) << endl;
 }
