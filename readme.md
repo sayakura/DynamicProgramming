@@ -13,6 +13,7 @@ It like when your mom is forcing you to eat a 25 inch pizza in an hour, and you 
 
 However in dynamic programming, the order matter! you are still dividing big problem into smaller sub problem, but it follows a pattern, let's use the  "fibonacci numbers" question as an example. You all know that in fibonacci number, f(n) = f(n - 1) + f(n - 2). And it works as the following:
 
+```
 F0  F1	F2	F3	F4	F5	F6	F7	F8	F9	F10	
 0   1	1	2	3	5	8	13	21	34	55	
 
@@ -20,6 +21,7 @@ f(3) = f(3 - 1) + f(3 - 2)
 f(3) = f(2) + f(1)
 f(3) = 1 + 1
 f(3) = 2
+``` 
 
 well, here we are dividing the f(3) into smaller sub-problem like f(3 - 1) + f(3 - 2) or f(2) + f(1), and the result of these two computations has to be calculated beforehand (before f(3) is calculated), you can see a chain of dependency here, f(3) is depending on f(2) and f(1), and f(2) is depending on f(1) and f(0).
 
