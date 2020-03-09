@@ -57,15 +57,33 @@ int findLPSLengthTopDown(vector<vector<int > >&dp, const string &st, int start ,
     return dp[start][end];
 }
 
-int findLPSLength(const string &st) {
+int findLPSDP(const string &st)
+{
+    vector<vector<int> >dp(st.length(), vector<int>(st.length(), 0));
+    for (int i = 0; i < st.length(); i++)
+        dp[i][i] = 1;
+    for (int i = st.length() - 1; i >= 0; i--)  {
+        for (int j = i + 1; j < st.length(); j++) {
+            if (st[i] == st[j])
+                dp[i][j] = 2 + dp[i + 1][j - 1];
+            else 
+                dp[i][j] = max(dp[i + 1][j], dp[i][j - 1]);
+        }
+    }
+    return dp[0][st.length() - 1];
+}
 
-    return findLPSLengthRecursive(st, 0, st.length() - 1);
+void findLPSLength(const string &st) {
+
+    cout << findLPSLengthRecursive(st, 0, st.length() - 1) << endl;
+
     vector<vector<int> > dp(st.length(), vector<int>(st.length() + 1, -1)); 
-    return findLPSLengthTopDown(dp, st, 0, st.length() - 1);
+    cout << findLPSLengthTopDown(dp, st, 0, st.length() - 1) << endl;
+    cout << findLPSDP(st) << endl;
 }
 
 int main(int argc, char *argv[]) {
-  cout << findLPSLength("abdbca") << endl; // -> 5
-  cout << findLPSLength("cddpd") << endl;  // -> 3
-  cout << findLPSLength("pqr") << endl;    // -> 1
+  findLPSLength("abdbca"); // -> 5
+  findLPSLength("cddpd");  // -> 3
+  findLPSLength("pqr");    // -> 1
 }
